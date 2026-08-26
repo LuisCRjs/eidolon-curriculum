@@ -6,5 +6,6 @@
 | [`PF-M2 — Funciones, contratos y scopes`](PF-M2_functions_contracts_scopes.md) | approved | [`PF-M2`](../../02_curriculum/01_programming_foundations.md#pf-m2--funciones-contratos-y-scopes) |
 | [`PF-M3 — Colecciones, comprehensions e iteración`](PF-M3_collections_comprehensions_iteration.md) | approved | [`PF-M3`](../../02_curriculum/01_programming_foundations.md#pf-m3--colecciones-comprehensions-e-iteración) |
 | [`PF-M4 — Módulos, paquetes y dependency management`](PF-M4_modules_packages_dependency_management.md) | approved | [`PF-M4`](../../02_curriculum/01_programming_foundations.md#pf-m4--módulos-paquetes-y-dependency-management) |
+| [`PF-M5 — POO, dataclasses y type hints`](PF-M5_oop_dataclasses_type_hints.md) | review candidate | [`PF-M5`](../../02_curriculum/01_programming_foundations.md#pf-m5--poo-dataclasses-y-type-hints) |
 
-PF-M4 está aprobado. PF-M5 puede comenzar como siguiente módulo de la secuencia; todavía no ha sido generado.
+PF-M5 está disponible para revisión. No se avanzará a PF-M6 hasta completar su revisión.

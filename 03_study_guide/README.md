@@ -44,5 +44,6 @@ Si otro módulo ya enseñó un concepto, se enlaza por ID en vez de copiarlo. Si
 | [`PF-M2`](programming_foundations/PF-M2_functions_contracts_scopes.md) | approved | Prerequisite aprobado para PF-M3 |
 | [`PF-M3`](programming_foundations/PF-M3_collections_comprehensions_iteration.md) | approved | Gate técnico, pedagógico y editorial aprobado |
 | [`PF-M4`](programming_foundations/PF-M4_modules_packages_dependency_management.md) | approved | Gate técnico, pedagógico, curricular y editorial aprobado |
+| [`PF-M5`](programming_foundations/PF-M5_oop_dataclasses_type_hints.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
 
-PF-M4 está aprobado. PF-M5 puede comenzar como siguiente módulo de la secuencia; todavía no ha sido generado.
+PF-M5 está disponible para revisión. No se avanzará a PF-M6 hasta completar su revisión.

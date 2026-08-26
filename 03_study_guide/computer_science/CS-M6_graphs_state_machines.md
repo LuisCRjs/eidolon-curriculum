@@ -1,4 +1,4 @@
-# CS-M6 — Grafos y máquinas de estado
+# CS-M6 — Graphs, lógica, conjuntos y máquinas de estado
 
 **Track:** Computer Science Foundations  
 **Competencias:** D2.2; soporte D2.1, D2.3  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M5, PF-M9, CS-M1, CS-M2, CS-M3, CS-M4, CS-M5  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M6](../../02_curriculum/02_computer_science_foundations.md#cs-m6--graphs-lógica-conjuntos-y-máquinas-de-estado)  
-**Status:** review candidate
+**Status:** approved
 
 Una persona puede conectarse con muchas otras por múltiples caminos; una entidad puede cambiar de state, pero no mediante cualquier transition. Una secuencia o un tree no expresan esas reglas generales por sí solos.
 

@@ -1,4 +1,4 @@
-# CS-M7 — Sistemas operativos, memoria y filesystems
+# CS-M7 — Fundamentos de sistemas operativos: memoria y filesystem
 
 **Track:** Computer Science Foundations  
 **Competencias:** D3.1; soporte D2.1  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1–PF-M9, CS-M1–CS-M6  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M7](../../02_curriculum/02_computer_science_foundations.md#cs-m7--fundamentos-de-sistemas-operativos-memoria-y-filesystem)  
-**Status:** review candidate
+**Status:** approved
 
 Una línea cotidiana parece sencilla:
 

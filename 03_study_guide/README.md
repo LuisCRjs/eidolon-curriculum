@@ -50,19 +50,19 @@ Si otro módulo ya enseñó un concepto, se enlaza por ID en vez de copiarlo. Si
 | [`PF-M8`](programming_foundations/PF-M8_async_await_tasks_cancellation_backpressure.md) | approved | Gate global acumulativo aprobado |
 | [`PF-M9`](programming_foundations/PF-M9_testing_debugging_logging_review.md) | approved | Gate global acumulativo aprobado |
 
-Programming Foundations superó el gate acumulativo. PF-M1–PF-M9 están aprobados y Computer Science Foundations es el track activo.
+Programming Foundations y Computer Science Foundations superaron sus gates acumulativos. PF-M1–PF-M9 y CS-M1–CS-M10 están aprobados.
 
 ## Computer Science Foundations
 
 | Módulo | Estado | Nota |
 |---|---|---|
-| [`CS-M1`](computer_science/CS-M1_complexity_measurement_cost_models.md) | review candidate | Complejidad, medición y modelos de costo; pendiente de auditoría acumulativa del track |
-| [`CS-M2`](computer_science/CS-M2_arrays_hashmaps_sets.md) | review candidate | Arrays, hash maps y sets; pendiente de auditoría acumulativa del track |
-| [`CS-M3`](computer_science/CS-M3_stacks_queues_linked_structures.md) | review candidate | Stacks, queues y estructuras enlazadas; pendiente de auditoría acumulativa del track |
-| [`CS-M4`](computer_science/CS-M4_recursion_searching_sorting.md) | review candidate | Recursión, búsqueda y ordenamiento; pendiente de auditoría acumulativa del track |
-| [`CS-M5`](computer_science/CS-M5_trees_heaps_priority_queues.md) | review candidate | Árboles, heaps y priority queues; pendiente de auditoría acumulativa del track |
-| [`CS-M6`](computer_science/CS-M6_graphs_state_machines.md) | review candidate | Grafos y máquinas de estado; pendiente de auditoría acumulativa del track |
-| [`CS-M7`](computer_science/CS-M7_operating_systems_memory_filesystems.md) | review candidate | Sistemas operativos, memoria y filesystems; pendiente de auditoría acumulativa del track |
-| [`CS-M8`](computer_science/CS-M8_processes_threads_concurrency_synchronization.md) | review candidate | Procesos, threads, concurrencia y sincronización; pendiente de auditoría acumulativa del track |
-| [`CS-M9`](computer_science/CS-M9_networking_http_transport_foundations.md) | review candidate | Networking, transporte y fundamentos de HTTP; pendiente de auditoría acumulativa del track |
-| [`CS-M10`](computer_science/CS-M10_computer_architecture_memory_hierarchy_performance.md) | review candidate | Arquitectura de computadoras para programadores; pendiente de auditoría acumulativa del track |
+| [`CS-M1`](computer_science/CS-M1_complexity_measurement_cost_models.md) | approved | Complejidad, medición y modelos de costo; gate acumulativo aprobado |
+| [`CS-M2`](computer_science/CS-M2_arrays_hashmaps_sets.md) | approved | Arrays, hash maps y sets; gate acumulativo aprobado |
+| [`CS-M3`](computer_science/CS-M3_stacks_queues_linked_structures.md) | approved | Stacks, queues, deques y linked lists; gate acumulativo aprobado |
+| [`CS-M4`](computer_science/CS-M4_recursion_searching_sorting.md) | approved | Recursion, searching y sorting; gate acumulativo aprobado |
+| [`CS-M5`](computer_science/CS-M5_trees_heaps_priority_queues.md) | approved | Trees, heaps y top-k; gate acumulativo aprobado |
+| [`CS-M6`](computer_science/CS-M6_graphs_state_machines.md) | approved | Graphs, lógica, conjuntos y máquinas de estado; gate acumulativo aprobado |
+| [`CS-M7`](computer_science/CS-M7_operating_systems_memory_filesystems.md) | approved | Fundamentos de sistemas operativos: memoria y filesystem; gate acumulativo aprobado |
+| [`CS-M8`](computer_science/CS-M8_processes_threads_concurrency_synchronization.md) | approved | Procesos, threads y concurrencia; gate acumulativo aprobado |
+| [`CS-M9`](computer_science/CS-M9_networking_http_transport_foundations.md) | approved | Networking básico: DNS, TCP, TLS y HTTP; gate acumulativo aprobado |
+| [`CS-M10`](computer_science/CS-M10_computer_architecture_memory_hierarchy_performance.md) | approved | Arquitectura de computadoras para programadores; gate acumulativo aprobado |

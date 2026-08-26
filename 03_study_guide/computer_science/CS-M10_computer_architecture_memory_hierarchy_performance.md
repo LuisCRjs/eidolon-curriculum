@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1–PF-M9, CS-M1–CS-M9  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M10](../../02_curriculum/02_computer_science_foundations.md#cs-m10--arquitectura-de-computadoras-para-programadores)  
-**Status:** review candidate
+**Status:** approved
 
 CS-M1 explicó crecimiento; CS-M2–CS-M6, estructuras/algoritmos/estado; CS-M7, OS/memoria/files; CS-M8, concurrencia; CS-M9, red. Ahora conectamos esas abstracciones con la máquina física sin reemplazar el análisis algorítmico por folklore de hardware.
 

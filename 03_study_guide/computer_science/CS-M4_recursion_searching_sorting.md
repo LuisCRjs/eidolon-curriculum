@@ -1,4 +1,4 @@
-# CS-M4 — Recursión, búsqueda y ordenamiento
+# CS-M4 — Recursion, searching y sorting
 
 **Track:** Computer Science Foundations  
 **Competencias:** D2.1; soporte D2.3  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M2, PF-M3, PF-M9, CS-M1, CS-M2, CS-M3  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M4](../../02_curriculum/02_computer_science_foundations.md#cs-m4--recursion-searching-y-sorting)  
-**Status:** review candidate
+**Status:** approved
 
 Dos programas pueden producir el mismo resultado y, aun así, exigir cantidades muy distintas de tiempo, memoria o preprocesamiento. También pueden parecer correctos mientras violan una precondition: binary search sobre datos desordenados puede devolver una respuesta falsa sin lanzar ninguna excepción.
 

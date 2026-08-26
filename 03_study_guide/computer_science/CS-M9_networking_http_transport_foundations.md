@@ -1,4 +1,4 @@
-# CS-M9 — Networking, transporte y fundamentos de HTTP
+# CS-M9 — Networking básico: DNS, TCP, TLS y HTTP
 
 **Track:** Computer Science Foundations  
 **Competencias:** D3.3; soporte D3.1, D3.2  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1–PF-M9, CS-M1–CS-M8  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M9](../../02_curriculum/02_computer_science_foundations.md#cs-m9--networking-básico-dns-tcp-tls-y-http)  
-**Status:** review candidate
+**Status:** approved
 
 El proceso A quiere enviar `{"event_id": "evt-001"}` al proceso B. Antes de hablar de frameworks, debe responder: ¿cómo encuentra A a B?, ¿qué bytes salen?, ¿dónde termina un mensaje?, ¿qué ocurre si el peer tarda o desaparece?, ¿y cómo sabe A si B aplicó el efecto?
 

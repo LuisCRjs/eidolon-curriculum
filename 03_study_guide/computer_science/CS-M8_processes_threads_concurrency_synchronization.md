@@ -1,4 +1,4 @@
-# CS-M8 — Procesos, threads, concurrencia y sincronización
+# CS-M8 — Procesos, threads y concurrencia
 
 **Track:** Computer Science Foundations  
 **Competencias:** D3.2; soporte D3.1  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1–PF-M9, CS-M1–CS-M7  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M8](../../02_curriculum/02_computer_science_foundations.md#cs-m8--procesos-threads-y-concurrencia)  
-**Status:** review candidate
+**Status:** approved
 
 Tres trabajos de I/O pueden pasar gran parte del tiempo esperando. Tres cálculos CPU-bound pueden competir por CPU. Dos workers pueden leer el mismo contador y perder una actualización. Agregar concurrencia puede mejorar throughput o responsividad, pero también agrega overhead, sincronización, nondeterminism y failure modes.
 

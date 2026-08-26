@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M3, PF-M5, PF-M9, CS-M1  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M2](../../02_curriculum/02_computer_science_foundations.md#cs-m2--arrays-hash-maps-y-sets)  
-**Status:** review candidate
+**Status:** approved
 
 Programming Foundations enseñó a utilizar `list`, `dict` y `set`. CS-M1 enseñó a definir `n`, estimar tiempo y memoria y medir una hipótesis. Ahora abriremos la caja conceptual lo suficiente para justificar por qué esas estructuras favorecen operaciones distintas.
 

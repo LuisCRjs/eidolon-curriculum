@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M9  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M1](../../02_curriculum/02_computer_science_foundations.md#cs-m1--complejidad-medición-y-modelos-de-costo)  
-**Status:** review candidate
+**Status:** approved
 
 Una solución correcta puede dejar de ser viable cuando crecen los datos o se repite una operación. También puede ocurrir lo contrario: una estructura con mejor crecimiento asintótico puede perder frente a un scan pequeño por el costo de construirla, asignar memoria y calcular hashes.
 
@@ -873,7 +873,7 @@ La key de orden y los tie-breakers deterministas son parte del contrato, pero so
 
 ### 12.2 Top-k
 
-Seleccionar los `k` mejores candidatos podría resolverse ordenando todos: O(n log n). Una estructura futura de tamaño `k` puede orientar un costo O(n log k). No se implementa todavía: heaps pertenecen a CS-M5.
+Seleccionar los `k` mejores candidatos podría resolverse ordenando todos: O(n log n). Para `2 <= k <= n`, una estructura futura de tamaño `k` puede orientar un costo O(n log k); `k = 1` conserva un scan O(n), no “cero trabajo” porque `log(1) = 0`. No se implementa todavía: heaps pertenecen a CS-M5.
 
 El punto pedagógico es formular dimensiones:
 

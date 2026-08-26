@@ -1,4 +1,4 @@
-# CS-M3 — Stacks, queues y estructuras enlazadas
+# CS-M3 — Stacks, queues, deques y linked lists
 
 **Track:** Computer Science Foundations  
 **Competencias:** D2.1; soporte D2.3, D3.2  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M3, PF-M5, PF-M8, CS-M1, CS-M2  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M3](../../02_curriculum/02_computer_science_foundations.md#cs-m3--stacks-queues-deques-y-linked-lists)  
-**Status:** review candidate
+**Status:** approved
 
 Deshacer la última acción, procesar trabajos en orden de llegada e insertar un elemento después de una posición ya conocida son problemas distintos. Una sola colección puede ejecutarlos, pero no necesariamente comunica el orden correcto ni ofrece el costo apropiado.
 

@@ -1,4 +1,4 @@
-# CS-M5 — Árboles, heaps y priority queues
+# CS-M5 — Trees, heaps y top-k
 
 **Track:** Computer Science Foundations  
 **Competencias:** D2.1; soporte D2.2, D2.3  
@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M3, PF-M5, PF-M9, CS-M1, CS-M2, CS-M3, CS-M4  
 **Build:** EIDOLON 0.0b  
 **Curriculum source:** [CS-M5](../../02_curriculum/02_computer_science_foundations.md#cs-m5--trees-heaps-y-top-k)  
-**Status:** review candidate
+**Status:** approved
 
 Una secuencia comunica “antes/después”; un `dict`, “key → value”. Ninguna expresa por sí sola parent/child ni mantiene accesible el candidato prioritario mientras llegan nuevos elementos.
 
@@ -1323,7 +1323,7 @@ Output:
 
 ## 20. Top-k con heap bounded
 
-Para `n` candidatos y `k << n`:
+Para `n` candidatos y `2 <= k << n`:
 
 ```text
 full sort       → O(n log n), output completo
@@ -1383,7 +1383,7 @@ Output:
 []
 ```
 
-El heap bounded selecciona; el `sorted()` final ordena solo `k` outputs, O(k log k). Por tanto una expresión más precisa es O(n log k + k log k), que se resume O(n log k) cuando `k <= n` y domina el scan.
+El heap bounded selecciona; el `sorted()` final ordena solo `k_eff = min(k, n)` outputs. Para `2 <= k_eff <= n`, una expresión precisa es O(n log k_eff + k_eff log k_eff), resumible como O(n log k_eff). Si `k_eff = 1`, el scan/select es O(n); si `k <= 0`, esta función retorna en O(1). Declarar esos edge cases evita interpretar literalmente `log(1) = 0` como ausencia de trabajo.
 
 Scores son datos sintéticos: no sustituyen provenance, evidence policy ni domain validity. Retrieval real se estudia mucho después.
 

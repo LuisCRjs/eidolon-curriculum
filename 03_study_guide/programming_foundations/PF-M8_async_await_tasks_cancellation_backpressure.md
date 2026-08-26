@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M4, PF-M5, PF-M6, PF-M7  
 **Build:** EIDOLON 0.0a  
 **Curriculum source:** [PF-M8](../../02_curriculum/01_programming_foundations.md#pf-m8--asyncawait-antes-del-web-framework)  
-**Status:** review candidate
+**Status:** approved
 
 Una operación secuencial que espera I/O puede dejar al programa ocioso aunque exista otro trabajo listo. Crear miles de tasks tampoco resuelve el problema: puede convertir espera en saturación, trabajo huérfano y shutdown impredecible.
 

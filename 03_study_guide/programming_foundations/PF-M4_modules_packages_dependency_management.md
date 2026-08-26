@@ -1664,9 +1664,51 @@ evt-001
 
 El entry point llama `main` mediante metadata. `python -m` ejecuta el módulo con package context y activa su main guard.
 
-### 13.3 Sin argparse todavía
+### 13.3 `argparse` mínimo: el entry point recibe intención
 
-PF-M4 solo necesita demostrar un comando instalado. Añadir subcommands, help complejo, parsing y errores de usuario distraería del packaging. El journal futuro podrá usar `argparse` cuando su interfaz tenga requisitos claros.
+El launcher resuelve cómo llegar a `main`; todavía falta convertir argumentos en una intención explícita. La standard library cubre esa frontera con `argparse`. PF-M4 solo necesita el mecanismo mínimo que prepara la CLI de EIDOLON 0.0a; validación de datos, filesystem y traducción detallada de errores pertenecen a PF-M6.
+
+**Ejemplo ejecutable:**
+
+```python
+import argparse
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="eidolon")
+    commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("list", help="list synthetic events")
+
+    show_parser = commands.add_parser("show", help="show one event")
+    show_parser.add_argument("event_id")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = build_parser().parse_args(argv)
+
+    if args.command == "list":
+        print("evt-001")
+        return
+
+    if args.command == "show":
+        print(f"event={args.event_id}")
+
+
+main(["show", "evt-001"])
+```
+
+Output:
+
+```text
+event=evt-001
+```
+
+`main()` conserva un argumento opcional para que el console script pueda llamarlo sin argumentos. Recibir una list explícita permite comprobar el parsing sin modificar `sys.argv`. Los subcommands expresan acciones diferentes; no justifican mezclar dentro de `cli.py` las reglas de dominio o persistencia.
+
+La versión P0 puede crecer hacia `init`, `append`, `list`, `show`, `correct`, `export`, `verify` y `replay` reutilizando el mismo patrón. PF-M4 no implementa esos comportamientos: demuestra que el package instalado puede despachar una intención hacia funciones cohesionadas.
+
+**Failure case:** `eidolon show` sin `event_id` termina con el error de uso y exit status no cero que produce `argparse`. No fijes el texto completo: puede variar entre versiones; comprueba la propiedad estable.
 
 ### 13.4 Entry point roto
 
@@ -1693,7 +1735,7 @@ Si `cli.py` solo define `main`, el launcher fallará al cargar el atributo. Corr
 
 ### Modifica
 
-Cambia el output de `main` sin modificar `domain` ni `application`. Comprueba que las funciones puras mantienen sus asserts.
+Cambia el output de `main` sin modificar `domain` ni `application`. Después agrega un subcommand `verify` sin argumentos que solo imprima `verification requested`. Comprueba que las funciones puras mantienen sus asserts.
 
 ### Comprueba en terminal
 
@@ -2586,7 +2628,7 @@ No agregues OOP, dataclasses, type hints, repositories, archivos de datos, JSON,
 - Instalar modifica un environment; declarar expresa intención; un lock registra una resolución.
 - Una dependencia transitiva usada directamente debe convertirse en directa o dejar de importarse.
 - `pyproject.toml` declara build system, metadata, requirements, extras, entry points y tool config.
-- `[project.scripts]` convierte una función sin argumentos en un comando instalado.
+- `[project.scripts]` convierte una callable compatible en un comando instalado; `argparse` puede despachar subcommands sin llevar reglas de dominio a la CLI.
 - Cada dependencia agrega código y mantenimiento; provenance y spelling se verifican antes de instalar.
 - Ejecutar desde otra ubicación detecta dependencia accidental del cwd.
 
@@ -2623,6 +2665,7 @@ No agregues OOP, dataclasses, type hints, repositories, archivos de datos, JSON,
 - [ ] Puedo escribir un `pyproject.toml` mínimo y explicar cada tabla.
 - [ ] Puedo distinguir import name de distribution name.
 - [ ] Puedo definir y comprobar un console entry point.
+- [ ] Puedo despachar un subcommand y sus argumentos con `argparse` sin mezclar dominio o filesystem en la CLI.
 - [ ] Puedo distinguir constraint, lock y environment instalado.
 - [ ] Puedo proponer una actualización controlada con rollback.
 - [ ] Puedo evaluar costo, provenance, mantenimiento y typosquatting.

@@ -44,9 +44,10 @@ Si otro módulo ya enseñó un concepto, se enlaza por ID en vez de copiarlo. Si
 | [`PF-M2`](programming_foundations/PF-M2_functions_contracts_scopes.md) | approved | Prerequisite aprobado para PF-M3 |
 | [`PF-M3`](programming_foundations/PF-M3_collections_comprehensions_iteration.md) | approved | Gate técnico, pedagógico y editorial aprobado |
 | [`PF-M4`](programming_foundations/PF-M4_modules_packages_dependency_management.md) | approved | Gate técnico, pedagógico, curricular y editorial aprobado |
-| [`PF-M5`](programming_foundations/PF-M5_oop_dataclasses_type_hints.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
-| [`PF-M6`](programming_foundations/PF-M6_exceptions_files_json_resource_lifecycle.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
-| [`PF-M7`](programming_foundations/PF-M7_decorators_context_managers.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
-| [`PF-M8`](programming_foundations/PF-M8_async_await_tasks_cancellation_backpressure.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
+| [`PF-M5`](programming_foundations/PF-M5_oop_dataclasses_type_hints.md) | approved | Gate global acumulativo aprobado |
+| [`PF-M6`](programming_foundations/PF-M6_exceptions_files_json_resource_lifecycle.md) | approved | Gate global acumulativo aprobado |
+| [`PF-M7`](programming_foundations/PF-M7_decorators_context_managers.md) | approved | Gate global acumulativo aprobado |
+| [`PF-M8`](programming_foundations/PF-M8_async_await_tasks_cancellation_backpressure.md) | approved | Gate global acumulativo aprobado |
+| [`PF-M9`](programming_foundations/PF-M9_testing_debugging_logging_review.md) | approved | Gate global acumulativo aprobado |
 
-PF-M5, PF-M6, PF-M7 y PF-M8 están disponibles para revisión. No se avanzará a PF-M9 hasta completar la revisión correspondiente.
+Programming Foundations superó el gate acumulativo. PF-M1–PF-M9 están aprobados y el siguiente track autorizado es Computer Science Foundations; sus módulos no se generan en esta entrega.

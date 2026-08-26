@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M4, PF-M5  
 **Build:** EIDOLON 0.0a  
 **Curriculum source:** [PF-M6](../../02_curriculum/01_programming_foundations.md#pf-m6--excepciones-archivos-json-y-lifecycle-de-recursos)  
-**Status:** review candidate
+**Status:** approved
 
 Guardar un Event no consiste solo en llamar `write`. Entre el objeto válido y los bytes persistidos pueden aparecer datos no serializables, paths equivocados, permisos insuficientes, texto con otro encoding, escrituras parciales, versiones desconocidas o una línea corrupta. Ocultar cualquiera de esos fallos puede convertir un problema detectable en pérdida silenciosa de evidencia.
 
@@ -1688,6 +1688,86 @@ Agrega un record con Unicode y verifica que el archivo sigue teniendo una línea
 
 ¿Qué propiedad de JSONL ayuda a localizar corrupción y cuál no resuelve concurrencia?
 
+### 17.4 Checksum de integridad: detectar, no autenticar
+
+EIDOLON 0.0a también debe detectar un record cuyo contenido ya no coincide con el checksum registrado. El checksum se calcula sobre una representación canónica del record **sin** el propio field `checksum`; de otro modo el cálculo sería recursivo. `sort_keys=True` y separators explícitos evitan que distinto orden o whitespace cambien el input del hash.
+
+**Ejemplo ejecutable:**
+
+```python
+import hashlib
+import json
+
+
+class JournalChecksumError(Exception):
+    pass
+
+
+def canonical_record_bytes(record: dict[str, object]) -> bytes:
+    return json.dumps(
+        record,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+
+
+def seal_record(record: dict[str, object]) -> dict[str, object]:
+    if "checksum" in record:
+        raise ValueError("record already contains checksum")
+    sealed = dict(record)
+    sealed["checksum"] = hashlib.sha256(
+        canonical_record_bytes(record)
+    ).hexdigest()
+    return sealed
+
+
+def verify_record(record: dict[str, object]) -> dict[str, object]:
+    payload = dict(record)
+    expected = payload.pop("checksum", None)
+    if not isinstance(expected, str):
+        raise JournalChecksumError("missing checksum")
+
+    actual = hashlib.sha256(canonical_record_bytes(payload)).hexdigest()
+    if actual != expected:
+        raise JournalChecksumError("checksum mismatch")
+    return payload
+
+
+sealed = seal_record(
+    {
+        "schema_version": 2,
+        "record_type": "event",
+        "event_id": "evt-001",
+        "text": "Llegué a casa 🏠",
+    }
+)
+assert verify_record(sealed)["event_id"] == "evt-001"
+
+tampered = dict(sealed)
+tampered["text"] = "texto cambiado"
+try:
+    verify_record(tampered)
+except JournalChecksumError:
+    print("checksum mismatch detected")
+```
+
+Output:
+
+```text
+checksum mismatch detected
+```
+
+SHA-256 aquí detecta cambios accidentales bajo este contrato; **no autentica** el origen. Quien pueda cambiar el record y recalcular el checksum puede producir otra pareja válida. Firmas, keys y threat modeling profundo pertenecen a D12. El loader debe reportar ubicación y conservar source/quarantine igual que ante JSON o schema inválido.
+
+### Predice
+
+¿Cambiar solo el orden de keys antes de `seal_record` cambia el checksum? Explica el papel de `sort_keys=True`.
+
+### Detecta el bug
+
+Una implementación calcula el hash después de agregar `checksum` y luego intenta verificar incluyendo ese field. Identifica el contrato circular.
+
 ---
 
 ## 18. Corrupción localizada, fail fast y quarantine
@@ -2777,7 +2857,7 @@ El journal agrega Event, Claim y Correction en orden. Correction no modifica ni 
 
 - no verifica todavía existencia cross-object de cada target;
 - no implementa locks ni writers concurrentes;
-- no calcula checksums;
+- no conecta todavía el checksum de §17.4 con cada variante de `JournalEntry`; el mini challenge sí debe hacerlo;
 - no implementa database, transaction, query engine ni repository general;
 - no borra source ni convierte una proyección en source of truth;
 - no implementa custom context manager.
@@ -3202,11 +3282,12 @@ Reutiliza el package instalado y environment de PF-M4. `dependencies = []`: stan
 Incluye:
 
 1. frozen `SourceRef` con ID no vacío;
-2. `Event` con ID, Unicode text, `valid_time` aware, `recorded_at` aware, SourceRef y tuple de tags;
-3. `Claim` con ID, Event ID, statement, `recorded_at` y SourceRef;
-4. `Correction` con ID, target kind, target ID, replacement text, `recorded_at` y SourceRef;
-5. Enum para conjuntos cerrados;
-6. invariantes runtime mínimas.
+2. `SourceRecord` con ID, Unicode text, `recorded_at` aware y SourceRef;
+3. `Event` con ID, Unicode text, `valid_time` aware, `recorded_at` aware, SourceRef y tuple de tags;
+4. `Claim` con ID, Event ID, statement, `recorded_at` y SourceRef;
+5. `Correction` con ID, target kind, target ID, replacement text, `recorded_at` y SourceRef;
+6. Enum para conjuntos cerrados;
+7. invariantes runtime mínimas.
 
 No agregues fields de EIDOLON 1.0.
 
@@ -3218,6 +3299,7 @@ Define, como máximo:
 - `RecordValidationError`;
 - `UnsupportedSchemaVersionError`;
 - `JournalCorruptionError`;
+- `JournalChecksumError`;
 - `JournalReadError`;
 - `JournalWriteError`.
 
@@ -3236,7 +3318,7 @@ def entry_from_record(record: dict[str, object]) -> JournalEntry:
     ...
 ```
 
-El schema actual es 2 e incluye `schema_version`, `record_type`, ID estable, `source_id`, `recorded_at`, fields específicos, timestamps ISO con offset y tags como JSON array.
+El schema actual es 2 e incluye `schema_version`, `record_type`, ID estable, `source_id`, `recorded_at`, fields específicos, timestamps ISO con offset, tags como JSON array y checksum calculado según §17.4. Incluye un `record_type` distinto para SourceRecord.
 
 No uses `pickle`, `asdict` como contrato completo ni `default=str`.
 
@@ -3263,13 +3345,14 @@ Requisitos:
 6. schema desconocido produce `UnsupportedSchemaVersionError` y conserva línea;
 7. no se saltan blank/corrupt lines silenciosamente;
 8. una Correction se agrega después del Event y no lo reemplaza.
+9. checksum ausente o inconsistente produce `JournalChecksumError` con line number y conserva el source.
 
 ### 29.7 Round trip
 
-`checks/smoke.py` crea Event, Claim y Correction sintéticos con acentos y emoji. Debe comprobar:
+`checks/smoke.py` crea SourceRecord, Event, Claim y Correction sintéticos con acentos y emoji. Debe comprobar:
 
 ```python
-assert load_entries(path) == [event, claim, correction]
+assert load_entries(path) == [source_record, event, claim, correction]
 assert event.text == "Llegué a casa 🏠"
 assert correction.target_id == event.event_id
 assert correction.replacement_text == "Llegué al edificio"
@@ -3366,7 +3449,8 @@ Demuestra y explica:
 5. `datetime` enviado directamente a `json.dumps`;
 6. destination preexistente que no se reemplaza hasta completar temporal;
 7. intento rechazado de usar source como destination;
-8. Correction que deja Event intacto.
+8. Correction que deja Event intacto;
+9. checksum inconsistente en una línea preservada.
 
 En `partial_write_policy.md` responde:
 
@@ -3396,9 +3480,10 @@ El challenge se resuelve si:
 
 - models conservan invariantes de PF-M5;
 - serializers son explícitos y JSON-safe;
-- Event/Claim/Correction pasan round trip;
+- SourceRecord/Event/Claim/Correction pasan round trip;
 - JSONL tiene una entry por línea y UTF-8;
 - error corrupto conserva line number y cause;
+- checksum inconsistente se detecta sin presentar el hash como autenticación;
 - schema desconocido no se migra implícitamente;
 - migration es pure y no muta records;
 - source bytes/text permanecen idénticos;
@@ -3436,12 +3521,13 @@ No implementes custom decorators, custom context managers, async, pytest avanzad
 - `datetime` aware y Decimal requieren representaciones deliberadas.
 - `schema_version` describe el record, no la release completa.
 - JSONL ayuda con append, replay y corrupción localizada, pero no es database.
+- Un checksum sobre JSON canónico detecta cambios bajo ese contrato, pero no autentica el origen.
 - Saltar una línea corrupta sin receipt destruye evidencia.
 - Append puede dejar una última línea parcial y no coordina writers.
 - Temporal + validation + replace reduce destinos parciales, no promete durabilidad absoluta.
 - Source data no debe sobrescribirse con una derived representation.
 - Migration pure separa semántica del filesystem.
-- Event, Claim y Correction se serializan como tipos distintos.
+- SourceRecord, Event, Claim y Correction se serializan como tipos distintos.
 - Correction agrega evidencia y no reescribe silenciosamente el Event.
 
 ---
@@ -3481,6 +3567,7 @@ No implementes custom decorators, custom context managers, async, pytest avanzad
 - [ ] Puedo definir y validar `schema_version`.
 - [ ] Puedo distinguir schema y application version.
 - [ ] Puedo escribir JSONL append-only de un solo writer.
+- [ ] Puedo calcular y verificar un checksum canónico sin confundir integridad con autenticidad.
 - [ ] Puedo reportar línea corrupta con chaining.
 - [ ] Puedo elegir fail fast, quarantine o reporte.
 - [ ] Puedo diseñar un receipt sin payload sensible.
@@ -3524,8 +3611,8 @@ PF-M6 prepara pure migration, source preservation, destination temporal, validat
 1. propagation dibujada desde parser hasta frontera exterior;
 2. chaining demostrado mediante `__cause__`;
 3. UTF-8 y timestamp aware con round trip;
-4. Event/Claim/Correction serializados explícitamente;
-5. JSONL con line number ante corrupción;
+4. SourceRecord/Event/Claim/Correction serializados explícitamente;
+5. JSONL con line number ante corrupción y checksum inconsistente;
 6. source v1 idéntico después de migrar;
 7. destination v2 validado antes de replace;
 8. Correction presente junto al Event original;

@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M4  
 **Build:** EIDOLON 0.0a  
 **Curriculum source:** [PF-M5](../../02_curriculum/01_programming_foundations.md#pf-m5--poo-dataclasses-y-type-hints)  
-**Status:** review candidate
+**Status:** approved
 
 Un diccionario puede representar un event pequeño. El problema aparece cuando distintas partes del programa conocen sus keys, inventan variantes incompatibles y cambian estado sin conservar las reglas que lo hacían válido. Crear una clase tampoco resuelve eso automáticamente: una clase sin responsabilidad solo cambia corchetes por puntos.
 
@@ -2329,6 +2329,7 @@ Crea `SingleEventReader` con solo un field y un method `get`. Pásalo a `find_la
 El modelo educativo representa únicamente:
 
 - una referencia de procedencia (`SourceRef`);
+- un registro fuente sintético preservable (`SourceRecord`);
 - un acontecimiento sintético (`Event`);
 - una afirmación sobre un Event (`Claim`);
 - una corrección que referencia un objeto anterior (`Correction`);
@@ -2369,7 +2370,67 @@ False
 
 Equality por valor encaja; identity de runtime sigue siendo distinta.
 
-### 23.3 `Event` como snapshot pequeño
+### 23.3 `SourceRecord`: evidencia recibida antes de interpretarla
+
+`SourceRef` identifica de dónde proviene algo; `SourceRecord` representa el registro sintético recibido y preservable. No son sinónimos. Un Event puede derivarse de un SourceRecord, pero no debe reescribirlo ni fingir que su interpretación es el source original.
+
+**Ejemplo ejecutable:**
+
+```python
+from dataclasses import dataclass
+from datetime import UTC, datetime
+
+
+@dataclass(frozen=True)
+class SourceRef:
+    source_id: str
+
+    def __post_init__(self) -> None:
+        if type(self.source_id) is not str or not self.source_id:
+            raise ValueError("source_id must be a non-empty str")
+
+
+@dataclass(frozen=True)
+class SourceRecord:
+    record_id: str
+    text: str
+    recorded_at: datetime
+    source: SourceRef
+
+    def __post_init__(self) -> None:
+        if type(self.record_id) is not str or not self.record_id:
+            raise ValueError("record_id must be a non-empty str")
+        if type(self.text) is not str or not self.text:
+            raise ValueError("text must be a non-empty str")
+        if not isinstance(self.recorded_at, datetime):
+            raise ValueError("recorded_at must be a datetime")
+        if self.recorded_at.tzinfo is None or self.recorded_at.utcoffset() is None:
+            raise ValueError("recorded_at must be timezone-aware")
+        if not isinstance(self.source, SourceRef):
+            raise ValueError("source must be a SourceRef")
+
+
+record = SourceRecord(
+    record_id="rec-001",
+    text="Llegué a casa",
+    recorded_at=datetime(2026, 8, 26, 18, 31, tzinfo=UTC),
+    source=SourceRef("src-001"),
+)
+
+print(record.record_id)
+print(record.source.source_id)
+```
+
+Output:
+
+```text
+rec-001
+src-001
+```
+
+Esta dataclass todavía recibe datos ya construidos en memoria: no parsea ni valida JSON externo. PF-M6 enseñará esa frontera y su schema. Aquí importa el contrato: `recorded_at` describe el registro; un Event separado puede expresar `valid_time` sin colapsar ambos significados.
+
+### 23.4 `Event` como snapshot pequeño
 
 **Ejemplo ejecutable:**
 
@@ -2447,7 +2508,7 @@ src-001
 
 El ejemplo usa frozen snapshots: cambiar interpretación crea otro objeto en vez de mutar este. Esa es una decisión pedagógica, no una afirmación de que toda entity deba ser frozen.
 
-### 23.4 `Claim` no es `Event`
+### 23.5 `Claim` no es `Event`
 
 Event representa un acontecimiento registrado. Claim representa una afirmación sobre algo, aquí un Event. No convertir Claim en subclass de Event evita afirmar una relación `is-a` falsa.
 
@@ -2489,7 +2550,7 @@ La llegada ocurrió antes de las 19:00
 
 La class no decide si el Claim es verdadero ni mide confidence. Ese modelado epistemológico pertenece a fases posteriores.
 
-### 23.5 Correction referencia; no reescribe
+### 23.6 Correction referencia; no reescribe
 
 **Continuación — agrega al módulo anterior:**
 
@@ -2540,9 +2601,10 @@ Llegué al edificio
 
 El original conserva `Llegué a casa`. La Correction es evidencia nueva que referencia el ID anterior. La existencia real del target requiere un índice o store; no puede probarla `Correction.__post_init__` por sí sola.
 
-### 23.6 Diagrama conceptual
+### 23.7 Diagrama conceptual
 
 ```text
+SourceRef ──has-a──▶ SourceRecord ──may-produce──▶ Event
 SourceRef ──has-a──▶ Event
 SourceRef ──has-a──▶ Claim ──references──▶ Event ID
 SourceRef ──has-a──▶ Correction ──references──▶ Event/Claim ID
@@ -3144,11 +3206,12 @@ No existen archivos ni payloads externos.
 ### 30.4 Modelos requeridos
 
 1. `SourceRef`: frozen value object con `source_id` no vacío.
-2. `EventStatus`: Enum con `ACTIVE`, `CORRECTED`, `ARCHIVED`.
-3. `Event`: frozen snapshot con ID, text, aware `valid_time`, SourceRef, status y tuple de tags.
-4. `Claim`: frozen object con ID, `about_event_id`, statement y SourceRef.
-5. `CorrectionTarget`: Enum que distingue Event de Claim.
-6. `Correction`: frozen object con ID, target kind, target ID, replacement text y SourceRef.
+2. `SourceRecord`: frozen source evidence con ID, text, aware `recorded_at` y SourceRef.
+3. `EventStatus`: Enum con `ACTIVE`, `CORRECTED`, `ARCHIVED`.
+4. `Event`: frozen snapshot con ID, text, aware `valid_time`, SourceRef, status y tuple de tags.
+5. `Claim`: frozen object con ID, `about_event_id`, statement y SourceRef.
+6. `CorrectionTarget`: Enum que distingue Event de Claim.
+7. `Correction`: frozen object con ID, target kind, target ID, replacement text y SourceRef.
 
 Todos los strings de identidad/texto obligatorios son no vacíos. Los tags son strings no vacíos. Las annotations por sí solas no cuentan como validación.
 
@@ -3178,10 +3241,11 @@ Implementa una función tipada que reciba EventReader y produzca Correction solo
 
 ### 30.7 Smoke contract
 
-`checks/smoke.py` debe construir un Event y un Claim, agregarlos donde corresponda, crear Correction y comprobar:
+`checks/smoke.py` debe construir un SourceRecord, un Event y un Claim, agregarlos donde corresponda, crear Correction y comprobar:
 
 ```python
 assert store.get("evt-001") is event
+assert source_record.text == "Llegué a casa"
 assert event.text == "Llegué a casa"
 assert correction.target_id == event.event_id
 assert correction.replacement_text == "Llegué al edificio"
@@ -3311,6 +3375,7 @@ No agregues files, JSON, custom exception hierarchy, decorators generales, conte
 - [ ] Puedo detectar una jerarquía que rompe sustitución.
 - [ ] Puedo elegir composition o inheritance bajo tradeoffs explícitos.
 - [ ] Puedo distinguir value object y entity sin introducir DDD avanzado.
+- [ ] Puedo distinguir SourceRef, SourceRecord y Event sin convertir una interpretación en source.
 - [ ] Puedo separar identidad de runtime, equality e identidad de dominio.
 - [ ] Puedo crear una dataclass y explicar los methods generados.
 - [ ] Puedo usar defaults y `default_factory` sin aliasing.
@@ -3342,7 +3407,7 @@ No agregues files, JSON, custom exception hierarchy, decorators generales, conte
 
 PF-M5 prepara:
 
-- dataclasses separadas para Event y Claim;
+- dataclasses separadas para SourceRecord, Event y Claim;
 - SourceRef mediante composition;
 - Enum/IDs e invariantes locales;
 - distinction entre equality e identidad de dominio;

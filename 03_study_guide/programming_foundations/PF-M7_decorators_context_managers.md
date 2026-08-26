@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1, PF-M2, PF-M3, PF-M4, PF-M5, PF-M6  
 **Build:** EIDOLON 0.0a  
 **Curriculum source:** [PF-M7](../../02_curriculum/01_programming_foundations.md#pf-m7--decorators-y-context-managers-como-políticas)  
-**Status:** review candidate
+**Status:** approved
 
 Una operación de dominio debería explicar su regla principal. Cuando varias operaciones repiten timing, tracing o cleanup, copiar esa política alrededor de cada una crea inconsistencias. Ocultarla detrás de sintaxis sofisticada tampoco ayuda. PF-M7 estudia dos mecanismos para extraerla sin volver invisible el control flow:
 

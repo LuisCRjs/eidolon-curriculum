@@ -7,7 +7,7 @@
 **Prerequisites:** PF-M1  
 **Build:** EIDOLON 0.0a  
 **Curriculum source:** [PF-M2](../../02_curriculum/01_programming_foundations.md#pf-m2--funciones-contratos-y-scopes)  
-**Status:** review candidate
+**Status:** approved
 
 Un programa pequeño puede sobrevivir con instrucciones escritas una detrás de otra. El problema aparece cuando una regla cambia, debe reutilizarse o necesita probarse sin ejecutar todo el programa. PF-M2 enseña a convertir comportamiento en funciones con fronteras visibles: qué reciben, qué devuelven, qué pueden rechazar y qué efectos producen.
 

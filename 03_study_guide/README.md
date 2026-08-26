@@ -47,5 +47,6 @@ Si otro módulo ya enseñó un concepto, se enlaza por ID en vez de copiarlo. Si
 | [`PF-M5`](programming_foundations/PF-M5_oop_dataclasses_type_hints.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
 | [`PF-M6`](programming_foundations/PF-M6_exceptions_files_json_resource_lifecycle.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
 | [`PF-M7`](programming_foundations/PF-M7_decorators_context_managers.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
+| [`PF-M8`](programming_foundations/PF-M8_async_await_tasks_cancellation_backpressure.md) | review candidate | Pendiente de revisión técnica, pedagógica, curricular y editorial |
 
-PF-M5, PF-M6 y PF-M7 están disponibles para revisión. No se avanzará a PF-M8 hasta completar la revisión correspondiente.
+PF-M5, PF-M6, PF-M7 y PF-M8 están disponibles para revisión. No se avanzará a PF-M9 hasta completar la revisión correspondiente.

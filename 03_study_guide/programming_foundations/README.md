@@ -8,5 +8,6 @@
 | [`PF-M4 — Módulos, paquetes y dependency management`](PF-M4_modules_packages_dependency_management.md) | approved | [`PF-M4`](../../02_curriculum/01_programming_foundations.md#pf-m4--módulos-paquetes-y-dependency-management) |
 | [`PF-M5 — POO, dataclasses y type hints`](PF-M5_oop_dataclasses_type_hints.md) | review candidate | [`PF-M5`](../../02_curriculum/01_programming_foundations.md#pf-m5--poo-dataclasses-y-type-hints) |
 | [`PF-M6 — Excepciones, archivos, JSON y lifecycle de recursos`](PF-M6_exceptions_files_json_resource_lifecycle.md) | review candidate | [`PF-M6`](../../02_curriculum/01_programming_foundations.md#pf-m6--excepciones-archivos-json-y-lifecycle-de-recursos) |
+| [`PF-M7 — Decorators y context managers como políticas`](PF-M7_decorators_context_managers.md) | review candidate | [`PF-M7`](../../02_curriculum/01_programming_foundations.md#pf-m7--decorators-y-context-managers-como-políticas) |
 
-PF-M5 y PF-M6 están disponibles para revisión. No se avanzará a PF-M7 hasta completar la revisión correspondiente.
+PF-M5, PF-M6 y PF-M7 están disponibles para revisión. No se avanzará a PF-M8 hasta completar la revisión correspondiente.
